@@ -97,6 +97,27 @@ final public class AndrolibResources {
         return pkg;
     }
 
+    public void decodeManifest(ExtFile apkFile, File outDir)
+            throws AndrolibException {
+
+        Duo<ResFileDecoder, AXmlResourceParser> duo = getManifestFileDecoder();
+        ResFileDecoder fileDecoder = duo.m1;
+
+        Directory inApk, out;
+        try {
+            inApk = apkFile.getDirectory();
+            out = new FileDirectory(outDir);
+
+            LOGGER.info("Decoding AndroidManifest.xml without resources...");
+            fileDecoder.decode(
+                inApk, "AndroidManifest.xml", out, "AndroidManifest.xml",
+                "xml");
+
+        } catch (DirectoryException ex) {
+            throw new AndrolibException(ex);
+        }
+    }
+
     public void decode(ResTable resTable, ExtFile apkFile, File outDir)
             throws AndrolibException {
         Duo<ResFileDecoder, AXmlResourceParser> duo = getResFileDecoder();
@@ -111,6 +132,7 @@ final public class AndrolibResources {
             inApk = apkFile.getDirectory();
             out = new FileDirectory(outDir);
 
+            LOGGER.info("Decoding AndroidManifest.xml with resources...");
             fileDecoder.decode(
                 inApk, "AndroidManifest.xml", out, "AndroidManifest.xml",
                 "xml");
@@ -231,6 +253,19 @@ final public class AndrolibResources {
 
         AXmlResourceParser axmlParser = new AXmlResourceParser();
         axmlParser.setAttrDecoder(new ResAttrDecoder());
+        decoders.setDecoder("xml",
+            new XmlPullStreamDecoder(axmlParser, getResXmlSerializer()));
+
+        return new Duo<ResFileDecoder, AXmlResourceParser>(
+            new ResFileDecoder(decoders), axmlParser);
+    }
+
+    public Duo<ResFileDecoder, AXmlResourceParser> getManifestFileDecoder() {
+        ResStreamDecoderContainer decoders =
+            new ResStreamDecoderContainer();
+
+        AXmlResourceParser axmlParser = new AXmlResourceParser();
+
         decoders.setDecoder("xml",
             new XmlPullStreamDecoder(axmlParser, getResXmlSerializer()));
 

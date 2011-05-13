@@ -77,6 +77,22 @@ public class Androlib {
         new AndrolibJava().decode(apkFile, outDir);
     }
 
+    public void decodeManifestRaw(ExtFile apkFile, File outDir)
+            throws AndrolibException {
+        try {
+            Directory apk = apkFile.getDirectory();
+            LOGGER.info("Copying raw manifest...");
+            apkFile.getDirectory().copyToDir(outDir, APK_MANIFEST_FILENAME);
+        } catch (DirectoryException ex) {
+            throw new AndrolibException(ex);
+        }
+    }
+
+    public void decodeManifestFull(ExtFile apkFile, File outDir)
+            throws AndrolibException {
+        mAndRes.decodeManifest(apkFile, outDir);
+    }
+
     public void decodeResourcesRaw(ExtFile apkFile, File outDir)
             throws AndrolibException {
         try {
@@ -436,5 +452,6 @@ public class Androlib {
         new String[]{"resources.arsc", "AndroidManifest.xml"};
     private final static String[] APP_RESOURCES_FILENAMES =
         new String[]{"AndroidManifest.xml", "res"};
+    private final static String APK_MANIFEST_FILENAME = "AndroidManifest.xml";
     private final static String VERSION = "1.3.2";
 }
