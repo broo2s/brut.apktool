@@ -325,6 +325,10 @@ public class AXmlResourceParser implements XmlResourceParser {
                     valueData
                 ), ex);
             }
+        } else {
+            if (valueType==TypedValue.TYPE_STRING) {
+                return m_strings.getString(valueRaw);
+            }
         }
 
         return TypedValue.coerceToString(valueType, valueData);
@@ -370,7 +374,7 @@ public class AXmlResourceParser implements XmlResourceParser {
     public String getAttributeValue(String namespace, String attribute) {
         int index = findAttribute(namespace, attribute);
         if (index == -1) {
-            return null;
+            return "";
         }
         return getAttributeValue(index);
     }

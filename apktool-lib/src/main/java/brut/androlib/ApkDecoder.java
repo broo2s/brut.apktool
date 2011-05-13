@@ -89,6 +89,7 @@ public class ApkDecoder {
                     break;
             }
         }
+
         if (hasResources()) {
             switch (mDecodeResources) {
                 case DECODE_RESOURCES_NONE:
@@ -99,7 +100,21 @@ public class ApkDecoder {
                         getResTable());
                     break;
             }
+        } else {
+            // if there's no resources.asrc, decode the manifest without looking up
+            // attribute references
+            if (hasManifest()) {
+                switch (mDecodeResources) {
+                case DECODE_RESOURCES_NONE:
+                    mAndrolib.decodeManifestRaw(mApkFile, outDir);
+                    break;
+                case DECODE_RESOURCES_FULL:
+                    mAndrolib.decodeManifestFull(mApkFile, outDir);
+                    break;
+                }
+            }
         }
+
         mAndrolib.decodeRawFiles(mApkFile, outDir);
         writeMetaFile();
     }
@@ -154,6 +169,14 @@ public class ApkDecoder {
     public boolean hasSources() throws AndrolibException {
         try {
             return mApkFile.getDirectory().containsFile("classes.dex");
+        } catch (DirectoryException ex) {
+            throw new AndrolibException(ex);
+        }
+    }
+
+    public boolean hasManifest() throws AndrolibException {
+        try {
+            return mApkFile.getDirectory().containsFile("AndroidManifest.xml");
         } catch (DirectoryException ex) {
             throw new AndrolibException(ex);
         }
