@@ -466,8 +466,17 @@ final public class AndrolibResources {
     }
 
     private File getFrameworkDir() throws AndrolibException {
-        File dir = new File(System.getProperty("user.home") +
-            File.separatorChar + "apktool" + File.separatorChar + "framework");
+        String path;
+
+        if (System.getProperty("os.name").equals("Mac OS X"))
+            path = System.getProperty("user.home") + File.separatorChar + 
+                "Library/Application Support/apktool/framework";
+        else 
+            path = System.getProperty("user.home") + File.separatorChar +
+                "apktool" + File.separatorChar + "framework";
+
+        File dir = new File(path);
+
         if (! dir.exists()) {
             if (! dir.mkdirs()) {
                 throw new AndrolibException("Can't create directory: " + dir);
