@@ -257,17 +257,25 @@ public class ARSCDecoder {
 
         byte screenLayout = 0;
         byte uiMode = 0;
+        short smallestScreenWidthDp = 0;
         if (size >= 32) {
             screenLayout = mIn.readByte();
             uiMode = mIn.readByte();
-            mIn.skipBytes(2);
+            smallestScreenWidthDp = mIn.readShort();
+        }
+
+        short screenWidthDp = 0;
+        short screenHeightDp = 0;
+        if (size >= 36) {
+            screenWidthDp = mIn.readShort();
+            screenHeightDp = mIn.readShort();
         }
 
         int exceedingSize = size - KNOWN_CONFIG_BYTES;
         if (exceedingSize > 0) {
             byte[] buf = new byte[exceedingSize];
             mIn.readFully(buf);
-            BigInteger exceedingBI = new BigInteger(buf);
+            BigInteger exceedingBI = new BigInteger(1, buf);
 
             if (exceedingBI.equals(BigInteger.ZERO)) {
                 LOGGER.fine(String.format(
@@ -275,7 +283,7 @@ public class ARSCDecoder {
                     KNOWN_CONFIG_BYTES));
             } else {
                 LOGGER.warning(String.format(
-                    "Config flags size > %d. Exceeding bytes: %0" + (exceedingSize * 2) + "X.",
+                    "Config flags size > %d. Exceeding bytes: 0x%X.",
                     KNOWN_CONFIG_BYTES, exceedingBI));
                 isInvalid = true;
             }
@@ -284,7 +292,7 @@ public class ARSCDecoder {
         return new ResConfigFlags(mcc, mnc, language, country, orientation,
             touchscreen, density, keyboard, navigation, inputFlags,
             screenWidth, screenHeight, sdkVersion, screenLayout, uiMode,
-            isInvalid);
+            smallestScreenWidthDp, screenWidthDp, screenHeightDp, isInvalid);
     }
 
     private void addMissingResSpecs() throws AndrolibException {
@@ -387,7 +395,7 @@ public class ARSCDecoder {
 
     private static final Logger LOGGER =
         Logger.getLogger(ARSCDecoder.class.getName());
-    private static final int KNOWN_CONFIG_BYTES = 32;
+    private static final int KNOWN_CONFIG_BYTES = 36;
 
 
     public static class ARSCData {
