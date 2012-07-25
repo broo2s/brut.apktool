@@ -9,11 +9,11 @@
   </parent>
   
   <groupId>com.github.tony19</groupId>
-  <artifactId>named-regexp</artifactId>
+  <artifactId>apktool-lib</artifactId>
   <packaging>jar</packaging>
   <name>apktool library</name>
   <description>AndroidManifest parser</description>
-  <version>1.4.4-SNAPSHOT</version>
+  <version>1.4.4-1-SNAPSHOT</version>
   
   <licenses>
     <license>
