@@ -38,12 +38,12 @@ import brut.androlib.res.decoder.AXmlResourceParser;
 
 //...
 
-public static void main(String[] args) {
+public void readManifest() {
 	InputStream manifestStream = getClassLoader().getResourceAsStream("AndroidManifest.xml");
-	parseStream(manifestStream);
+	parseXmlStream(manifestStream);
 }
 
-public void parseStream(InputStream stream) {
+public void parseXmlStream(InputStream stream) {
 	AXmlResourceParser xpp = new AXmlResourceParser(stream);
 	
 	int eventType = -1;
