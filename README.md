@@ -1,4 +1,4 @@
-apktool-lib 1.4.4
+apktool-lib 1.4.4-1
 ===================
 This library decodes the Android manifest (`AndroidManifest.xml`) from an APK. This is useful if you need to parse the manifest outside of an Android environment.
 
@@ -14,7 +14,7 @@ _Maven dependency_
 &lt;dependency>
   &lt;groupId>com.github.tony19&lt;/groupId>
   &lt;artifactId>apktool-lib&lt;/artifactId>
-  &lt;version>1.4.4&lt;/version>
+  &lt;version>1.4.4-1&lt;/version>
 &lt;/dependency>
 </pre>
 
@@ -52,7 +52,7 @@ public void parseStream(InputStream stream) {
 
 Download
 ========
-[apktool-lib-1.4.4.jar](https://oss.sonatype.org/content/repositories/releases/com/github/tony19/apktool-lib/1.4.4/apktool-lib-1.4.4.jar)
+[apktool-lib-1.4.4-1.jar](https://oss.sonatype.org/content/repositories/releases/com/github/tony19/apktool-lib/1.4.4-1/apktool-lib-1.4.4-1.jar)
 
 
 Build
@@ -71,7 +71,7 @@ License
 Changelog
 =========
 
-__1.4.4__ (25 July 2012)
+__1.4.4-1__ (25 July 2012)
  * Initial commit
 
 [1]: https://github.com/brutall/brut.apktool
