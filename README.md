@@ -38,6 +38,7 @@ import brut.androlib.res.decoder.AXmlResourceParser;
 
 //...
 
+// called from a library, used by an Android application
 public void readManifest() {
 	InputStream manifestStream = getClassLoader().getResourceAsStream("AndroidManifest.xml");
 	parseXmlStream(manifestStream);
