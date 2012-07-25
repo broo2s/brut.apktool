@@ -1,5 +1,5 @@
 /**
- *  Copyright 2011 Ryszard Wiśniewski <brut.alll@gmail.com>
+ *  Copyright 2010 Ryszard Wiśniewski <brut.alll@gmail.com>
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -14,17 +14,24 @@
  *  limitations under the License.
  */
 
-package brut.androlib.res.xml;
-
-import brut.androlib.AndrolibException;
-import brut.androlib.res.data.ResResource;
-import java.io.IOException;
-import org.xmlpull.v1.XmlSerializer;
+package brut.common;
 
 /**
  * @author Ryszard Wiśniewski <brut.alll@gmail.com>
  */
-public interface ResValuesXmlSerializable {
-    public void serializeToResValuesXml(XmlSerializer serializer, ResResource res)
-        throws IOException, AndrolibException;
+public class BrutException extends Exception {
+    public BrutException(Throwable cause) {
+        super(cause);
+    }
+
+    public BrutException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public BrutException(String message) {
+        super(message);
+    }
+
+    public BrutException() {
+    }
 }

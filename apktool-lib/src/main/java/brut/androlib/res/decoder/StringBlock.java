@@ -16,7 +16,6 @@
 
 package brut.androlib.res.decoder;
 
-import brut.androlib.res.AndrolibResources;
 import brut.androlib.res.xml.ResXmlEncoders;
 import brut.util.ExtDataInput;
 import java.io.IOException;

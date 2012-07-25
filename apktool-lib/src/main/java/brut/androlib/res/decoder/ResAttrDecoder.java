@@ -17,39 +17,15 @@
 package brut.androlib.res.decoder;
 
 import brut.androlib.AndrolibException;
-import brut.androlib.res.data.ResPackage;
-import brut.androlib.res.data.value.ResAttr;
-import brut.androlib.res.data.value.ResScalarValue;
 
 /**
- * @author Ryszard Wiśniewski <brut.alll@gmail.com>
+ * Simple attribute decoder that returns the attribute's raw value if present
+ *
+ * @author Anthony Trinh
  */
 public class ResAttrDecoder {
     public String decode(int type, int value, String rawValue, int attrResId)
             throws AndrolibException {
-        ResScalarValue resValue = mCurrentPackage.getValueFactory()
-            .factory(type, value, rawValue);
-
-        String decoded = null;
-        if (attrResId != 0) {
-            ResAttr attr = (ResAttr) getCurrentPackage().getResTable()
-                .getResSpec(attrResId).getDefaultResource().getValue();
-            decoded = attr.convertToResXmlFormat(resValue);
-        }
-
-        return decoded != null ? decoded : resValue.encodeAsResXmlAttr();
+        return rawValue != null ? rawValue  : "";
     }
-
-    public ResPackage getCurrentPackage() throws AndrolibException {
-        if (mCurrentPackage == null) {
-            throw new AndrolibException("Current package not set");
-        }
-        return mCurrentPackage;
-    }
-
-    public void setCurrentPackage(ResPackage currentPackage) {
-        mCurrentPackage = currentPackage;
-    }
-
-    private ResPackage mCurrentPackage;
 }
