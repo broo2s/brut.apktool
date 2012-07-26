@@ -922,7 +922,7 @@ public class AXmlResourceParser implements XmlResourceParser {
      * an index of name in m_strings.
      */
     private ExtDataInput m_reader;
-    private ResAttrDecoder mAttrDecoder;
+    private ResAttrDecoder mAttrDecoder = new ResAttrDecoder();
     private AndrolibException mFirstError;
 
     private boolean m_operational = false;

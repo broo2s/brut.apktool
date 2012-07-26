@@ -1,4 +1,4 @@
-apktool-lib 1.4.4-2
+apktool-lib 1.4.4-3
 ===================
 This library decodes a given precompiled XML resource (such as `AndroidManifest.xml`)
 from an APK without requiring an Android application context.
@@ -24,7 +24,7 @@ _Maven dependency_
 &lt;dependency>
   &lt;groupId>com.github.tony19&lt;/groupId>
   &lt;artifactId>apktool-lib&lt;/artifactId>
-  &lt;version>1.4.4-2&lt;/version>
+  &lt;version>1.4.4-3&lt;/version>
 &lt;/dependency>
 </pre>
 
@@ -68,7 +68,7 @@ public void parseXmlStream(InputStream stream) {
 
 Download
 ========
-[apktool-lib-1.4.4-2.jar](https://oss.sonatype.org/content/repositories/releases/com/github/tony19/apktool-lib/1.4.4-2/apktool-lib-1.4.4-2.jar)
+[apktool-lib-1.4.4-3.jar](https://oss.sonatype.org/content/repositories/releases/com/github/tony19/apktool-lib/1.4.4-3/apktool-lib-1.4.4-3.jar)
 
 
 Build
@@ -86,6 +86,9 @@ License
 
 Changelog
 =========
+
+__1.4.4-3__ (26 July 2012)
+ * Fix attribute decoding
 
 __1.4.4-2__ (26 July 2012)
  * Remove debug info and unused resource to reduce JAR size

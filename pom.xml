@@ -12,7 +12,7 @@
   <artifactId>apktool-lib</artifactId>
   <packaging>jar</packaging>
   <name>apktool library</name>
-  <description>AndroidManifest parser</description>
+  <description>Android XML resource parser</description>
   <version>1.4.4-3-SNAPSHOT</version>
   
   <licenses>
@@ -48,6 +48,12 @@
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>4.8.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.directory.studio</groupId>
+      <artifactId>org.dom4j.dom4j</artifactId>
+      <version>1.6.1</version>
       <scope>test</scope>
     </dependency>
     <dependency>
