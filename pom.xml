@@ -13,7 +13,7 @@
   <packaging>jar</packaging>
   <name>apktool library</name>
   <description>AndroidManifest parser</description>
-  <version>1.4.4-2</version>
+  <version>1.4.4-3-SNAPSHOT</version>
   
   <licenses>
     <license>
