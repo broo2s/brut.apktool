@@ -88,7 +88,7 @@ Changelog
 =========
 
 __1.4.4-2__ (26 July 2012)
- * Remove debug info to reduce JAR size
+ * Remove debug info and unused resource to reduce JAR size
 
 __1.4.4-1__ (25 July 2012)
  * Initial commit (based on [apktool][1] v1.4.4)
