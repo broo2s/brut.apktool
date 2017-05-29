@@ -1,5 +1,5 @@
 /**
- *  Copyright 2011 Ryszard Wiśniewski <brut.alll@gmail.com>
+ *  Copyright 2014 Ryszard Wiśniewski <brut.alll@gmail.com>
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -26,13 +26,13 @@ import org.apache.commons.io.IOUtils;
  * @author Ryszard Wiśniewski <brut.alll@gmail.com>
  */
 public class ResRawStreamDecoder implements ResStreamDecoder {
-	@Override
-	public void decode(InputStream in, OutputStream out)
-			throws AndrolibException {
-		try {
-			IOUtils.copy(in, out);
-		} catch (IOException ex) {
-			throw new AndrolibException("Could not decode raw stream", ex);
-		}
-	}
+    @Override
+    public void decode(InputStream in, OutputStream out)
+            throws AndrolibException {
+        try {
+            IOUtils.copy(in, out);
+        } catch (IOException ex) {
+            throw new AndrolibException("Could not decode raw stream", ex);
+        }
+    }
 }

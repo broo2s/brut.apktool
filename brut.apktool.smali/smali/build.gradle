@@ -28,26 +28,30 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
- 
-configurations {
-    antlr3
-    jflex
-    proguard
+
+apply plugin: 'antlr'
+apply plugin: 'jflex'
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath depends.jflex_plugin
+        classpath depends.proguard_gradle
+    }
 }
 
-ext.antlrSource = 'src/main/antlr3'
-ext.antlrOutput = file("${buildDir}/generated-sources/antlr3")
+configurations {
+    // Remove the full antlr library that's added by the antlr plugin. We manually
+    // add the smaller antlr_runtime library instead
+    compile.exclude group: 'org.antlr', module: 'antlr'
 
-ext.jflexSource = "src/main/jflex"
-ext.jflexOutput = file("${buildDir}/generated-sources/jflex")
-
-ext.testAntlrSource = 'src/test/antlr3'
-ext.testAntlrOutput = file("${buildDir}/generated-test-sources/antlr3")
-
-sourceSets.main.java.srcDir antlrOutput
-sourceSets.main.java.srcDir jflexOutput
-
-sourceSets.test.java.srcDir testAntlrOutput
+    // The jflex lexer doesn't have any runtime dependencies, so remove the dependency
+    // that gets added by the jflex plugin
+    compile.exclude group: 'de.jflex', module: 'jflex'
+}
 
 idea {
     module {
@@ -66,68 +70,60 @@ idea {
 
 dependencies {
     compile project(':brut.apktool.smali:util')
-    compile project(':brut.apktool.smali:dexlib')
-    compile 'org.antlr:antlr-runtime:3.2'
-    compile 'commons-cli:commons-cli:1.2'
-    compile 'com.google.guava:guava:13.0.1'
+    compile project(':brut.apktool.smali:dexlib2')
+    compile depends.antlr_runtime
+    compile depends.stringtemplate
+    compile depends.commons_cli
 
-    testCompile 'junit:junit:4.6'
+    testCompile depends.junit
 
-    antlr3 'org.antlr:antlr:3.2'
-    jflex 'de.jflex:jflex:1.4.3'
-}
-
-task generateAntlrSource(type: JavaExec) {
-    inputs.dir file(antlrSource)
-    outputs.dir file(antlrOutput)
-
-    mkdir(antlrOutput)
-    def grammars = fileTree(antlrSource).include('**/*.g')
-
-    classpath = configurations.antlr3
-    main = 'org.antlr.Tool'
-    args '-fo', relativePath("${antlrOutput}/org/jf/smali")
-    args grammars.files
-}
-
-task generateTestAntlrSource(type: JavaExec) {
-    inputs.dir file(testAntlrSource)
-    outputs.dir file(testAntlrOutput)
-
-    mkdir(testAntlrOutput)
-    def grammars = fileTree(testAntlrSource).include('**/*.g')
-
-    classpath = configurations.antlr3
-    main = 'org.antlr.Tool'
-    args '-fo', relativePath("${testAntlrOutput}/org/jf/smali")
-    args grammars.files.join(' ')
-}
-
-task generateJflexSource(type: JavaExec) {
-    inputs.dir file(jflexSource)
-    outputs.dir file(jflexOutput)
-
-    mkdir(jflexOutput)
-    def grammars = fileTree(jflexSource).include('**/*.flex')
-
-    classpath = configurations.jflex
-    main = 'JFlex.Main'
-    args '-q'
-    args '-d', relativePath("${jflexOutput}/org/jf/smali")
-    args grammars.files.join(' ')
-}
-
-compileJava.dependsOn generateAntlrSource, generateJflexSource
-compileTestJava.dependsOn generateTestAntlrSource
-
-// build a jar containing all dependencies
-jar {
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
-
-    manifest {
-        attributes("Main-Class": "org.jf.smali.main")
-    }
+    antlr depends.antlr
+    jflex depends.jflex
 }
 
 processResources.inputs.property('version', version)
 processResources.expand('version': version)
+
+// build a jar containing all dependencies
+task fatJar (type: Jar) {
+    from sourceSets.main.output
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+
+    manifest {
+        attributes('Main-Class': 'org.jf.smali.main')
+    }
+}
+tasks.getByPath('build').dependsOn(fatJar)
+
+generateTestGrammarSource {
+    outputDirectory = new File(outputDirectory, 'org/jf/smali')
+}
+
+generateGrammarSource {
+    outputDirectory = new File(outputDirectory, 'org/jf/smali')
+}
+
+generateJFlexSource {
+    outputDirectory = new File(outputDirectory, 'org/jf/smali')
+}
+
+task proguard(type: proguard.gradle.ProGuardTask, dependsOn: fatJar) {
+    def outFile = fatJar.destinationDir.getPath() + '/' + fatJar.baseName + '-' +
+            fatJar.version + '-small' + '.' + fatJar.extension
+
+    injars fatJar.archivePath
+    outjars outFile
+
+    libraryjars "${System.properties['java.home']}/lib/rt.jar"
+
+    dontobfuscate
+    dontoptimize
+
+    keep 'public class org.jf.smali.main { public static void main(java.lang.String[]); }'
+    keepclassmembers 'enum * { public static **[] values(); public static ** valueOf(java.lang.String); }'
+
+    dontwarn 'com.google.common.**'
+    dontnote 'com.google.common.**'
+}
+
+tasks.getByPath(':release').dependsOn(proguard)

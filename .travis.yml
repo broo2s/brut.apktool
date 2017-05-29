@@ -1,0 +1,25 @@
+env:
+   - TERM=dumb
+language: java
+jdk:
+  - openjdk7
+  - oraclejdk7
+  - oraclejdk8
+os:
+  - linux
+before_install:
+  - sudo apt-get update -qq
+  - sudo apt-get install -qq libstdc++6:i386 lib32z1 expect
+script: ./scripts/travis-ci/run-tests.sh
+branches:
+  only:
+    - master
+    - stable
+notifications:
+  irc:
+    channels:
+      - "chat.freenode.net#apktool"
+    on_success: change
+    on_failure: always
+    template:
+      - "%{repository_name} (%{commit}) : %{duration} - %{message}"

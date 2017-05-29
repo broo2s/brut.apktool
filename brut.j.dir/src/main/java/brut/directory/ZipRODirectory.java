@@ -1,5 +1,5 @@
 /**
- *  Copyright 2010 Ryszard Wiśniewski <brut.alll@gmail.com>
+ *  Copyright 2014 Ryszard Wiśniewski <brut.alll@gmail.com>
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -98,6 +98,16 @@ public class ZipRODirectory extends AbstractDirectory {
     @Override
     protected void removeFileLocal(String name) {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public int getCompressionLevel(String fileName)
+            throws DirectoryException {
+        ZipEntry entry =  mZipFile.getEntry(fileName);
+        if (entry == null) {
+            throw new PathNotExist("Entry not found: " + fileName);
+        }
+        return entry.getMethod();
     }
 
     private void loadAll() {

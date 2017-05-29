@@ -1,5 +1,5 @@
 /**
- *  Copyright 2011 Ryszard Wiśniewski <brut.alll@gmail.com>
+ *  Copyright 2014 Ryszard Wiśniewski <brut.alll@gmail.com>
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -23,12 +23,12 @@ import brut.androlib.AndrolibException;
  * @author Ryszard Wiśniewski <brut.alll@gmail.com>
  */
 public class ResFractionValue extends ResIntValue {
-	public ResFractionValue(int value, String rawValue) {
-		super(value, rawValue, "fraction");
-	}
+    public ResFractionValue(int value, String rawValue) {
+        super(value, rawValue, "fraction");
+    }
 
-	@Override
-	protected String encodeAsResXml() throws AndrolibException {
-		return TypedValue.coerceToString(TypedValue.TYPE_FRACTION, mValue);
-	}
+    @Override
+    protected String encodeAsResXml() throws AndrolibException {
+        return TypedValue.coerceToString(TypedValue.TYPE_FRACTION, mValue);
+    }
 }

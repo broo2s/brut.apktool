@@ -1,5 +1,5 @@
 /**
- *  Copyright 2011 Ryszard Wiśniewski <brut.alll@gmail.com>
+ *  Copyright 2014 Ryszard Wiśniewski <brut.alll@gmail.com>
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -27,36 +27,36 @@ import java.net.URI;
  * @author Ryszard Wiśniewski <brut.alll@gmail.com>
  */
 public class ExtFile extends File {
-	public ExtFile(File file) {
-		super(file.getPath());
-	}
+    public ExtFile(File file) {
+        super(file.getPath());
+    }
 
-	public ExtFile(URI uri) {
-		super(uri);
-	}
+    public ExtFile(URI uri) {
+        super(uri);
+    }
 
-	public ExtFile(File parent, String child) {
-		super(parent, child);
-	}
+    public ExtFile(File parent, String child) {
+        super(parent, child);
+    }
 
-	public ExtFile(String parent, String child) {
-		super(parent, child);
-	}
+    public ExtFile(String parent, String child) {
+        super(parent, child);
+    }
 
-	public ExtFile(String pathname) {
-		super(pathname);
-	}
+    public ExtFile(String pathname) {
+        super(pathname);
+    }
 
-	public Directory getDirectory() throws DirectoryException {
-		if (mDirectory == null) {
-			if (isDirectory()) {
-				mDirectory = new FileDirectory(this);
-			} else {
-				mDirectory = new ZipRODirectory(this);
-			}
-		}
-		return mDirectory;
-	}
+    public Directory getDirectory() throws DirectoryException {
+        if (mDirectory == null) {
+            if (isDirectory()) {
+                mDirectory = new FileDirectory(this);
+            } else {
+                mDirectory = new ZipRODirectory(this);
+            }
+        }
+        return mDirectory;
+    }
 
-	private Directory mDirectory;
+    private Directory mDirectory;
 }

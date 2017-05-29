@@ -1,5 +1,5 @@
 /**
- *  Copyright 2011 Ryszard Wiśniewski <brut.alll@gmail.com>
+ *  Copyright 2014 Ryszard Wiśniewski <brut.alll@gmail.com>
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -20,12 +20,12 @@ package brut.androlib.res.data.value;
  * @author Ryszard Wiśniewski <brut.alll@gmail.com>
  */
 public class ResColorValue extends ResIntValue {
-	public ResColorValue(int value, String rawValue) {
-		super(value, rawValue, "color");
-	}
+    public ResColorValue(int value, String rawValue) {
+        super(value, rawValue, "color");
+    }
 
-	@Override
-	protected String encodeAsResXml() {
-		return String.format("#%08x", mValue);
-	}
+    @Override
+    protected String encodeAsResXml() {
+        return String.format("#%08x", mValue);
+    }
 }

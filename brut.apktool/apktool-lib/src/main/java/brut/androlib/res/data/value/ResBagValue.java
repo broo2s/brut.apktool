@@ -1,5 +1,5 @@
 /**
- *  Copyright 2011 Ryszard Wiśniewski <brut.alll@gmail.com>
+ *  Copyright 2014 Ryszard Wiśniewski <brut.alll@gmail.com>
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -27,39 +27,39 @@ import org.xmlpull.v1.XmlSerializer;
  * @author Ryszard Wiśniewski <brut.alll@gmail.com>
  */
 public class ResBagValue extends ResValue implements ResValuesXmlSerializable {
-	protected final ResReferenceValue mParent;
+    protected final ResReferenceValue mParent;
 
-	public ResBagValue(ResReferenceValue parent) {
-		this.mParent = parent;
-	}
+    public ResBagValue(ResReferenceValue parent) {
+        this.mParent = parent;
+    }
 
-	@Override
-	public void serializeToResValuesXml(XmlSerializer serializer,
-			ResResource res) throws IOException, AndrolibException {
-		String type = res.getResSpec().getType().getName();
-		if ("style".equals(type)) {
-			new ResStyleValue(mParent, new Duo[0], null)
-					.serializeToResValuesXml(serializer, res);
-			return;
-		}
-		if ("array".equals(type)) {
-			new ResArrayValue(mParent, new Duo[0]).serializeToResValuesXml(
-					serializer, res);
-			return;
-		}
-		if ("plurals".equals(type)) {
-			new ResPluralsValue(mParent, new Duo[0]).serializeToResValuesXml(
-					serializer, res);
-			return;
-		}
+    @Override
+    public void serializeToResValuesXml(XmlSerializer serializer,
+                                        ResResource res) throws IOException, AndrolibException {
+        String type = res.getResSpec().getType().getName();
+        if ("style".equals(type)) {
+            new ResStyleValue(mParent, new Duo[0], null)
+                    .serializeToResValuesXml(serializer, res);
+            return;
+        }
+        if ("array".equals(type)) {
+            new ResArrayValue(mParent, new Duo[0]).serializeToResValuesXml(
+                    serializer, res);
+            return;
+        }
+        if ("plurals".equals(type)) {
+            new ResPluralsValue(mParent, new Duo[0]).serializeToResValuesXml(
+                    serializer, res);
+            return;
+        }
 
-		serializer.startTag(null, "item");
-		serializer.attribute(null, "type", type);
-		serializer.attribute(null, "name", res.getResSpec().getName());
-		serializer.endTag(null, "item");
-	}
+        serializer.startTag(null, "item");
+        serializer.attribute(null, "type", type);
+        serializer.attribute(null, "name", res.getResSpec().getName());
+        serializer.endTag(null, "item");
+    }
 
-	public ResReferenceValue getParent() {
-		return mParent;
-	}
+    public ResReferenceValue getParent() {
+        return mParent;
+    }
 }

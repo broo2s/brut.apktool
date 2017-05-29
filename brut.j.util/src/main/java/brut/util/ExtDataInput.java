@@ -1,5 +1,5 @@
 /**
- *  Copyright 2010 Ryszard Wiśniewski <brut.alll@gmail.com>
+ *  Copyright 2014 Ryszard Wiśniewski <brut.alll@gmail.com>
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -62,11 +62,21 @@ public class ExtDataInput extends DataInputDelegate {
         byte got = readByte();
         if (got != expected) {
             throw new IOException(String.format(
-                "Expected: 0x%08x, got: 0x%08x", expected, got));
+                    "Expected: 0x%08x, got: 0x%08x", expected, got));
         }
     }
 
-    public String readNulEndedString(int length, boolean fixed)
+    public void skipCheckChunkTypeInt(int expected, int possible) throws IOException {
+        int got = readInt();
+
+        if (got == possible) {
+            skipCheckChunkTypeInt(expected, -1);
+        } else if (got != expected) {
+            throw new IOException(String.format("Expected: 0x%08x, got: 0x%08x", expected, got));
+        }
+    }
+
+    public String readNullEndedString(int length, boolean fixed)
             throws IOException {
         StringBuilder string = new StringBuilder(16);
         while(length-- != 0) {

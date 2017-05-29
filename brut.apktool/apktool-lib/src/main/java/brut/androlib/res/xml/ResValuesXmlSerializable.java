@@ -1,5 +1,5 @@
 /**
- *  Copyright 2011 Ryszard Wiśniewski <brut.alll@gmail.com>
+ *  Copyright 2014 Ryszard Wiśniewski <brut.alll@gmail.com>
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -25,6 +25,6 @@ import org.xmlpull.v1.XmlSerializer;
  * @author Ryszard Wiśniewski <brut.alll@gmail.com>
  */
 public interface ResValuesXmlSerializable {
-	public void serializeToResValuesXml(XmlSerializer serializer,
-			ResResource res) throws IOException, AndrolibException;
+    public void serializeToResValuesXml(XmlSerializer serializer,
+                                        ResResource res) throws IOException, AndrolibException;
 }

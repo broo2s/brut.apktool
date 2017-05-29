@@ -1,5 +1,5 @@
 /**
- *  Copyright 2010 Ryszard Wiśniewski <brut.alll@gmail.com>
+ *  Copyright 2014 Ryszard Wiśniewski <brut.alll@gmail.com>
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -17,6 +17,11 @@
 package brut.util;
 
 import java.io.*;
+import java.util.zip.CRC32;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+import java.util.zip.ZipOutputStream;
+
 import org.apache.commons.io.IOUtils;
 
 /**
@@ -28,10 +33,8 @@ public class BrutIO {
         try {
             IOUtils.copy(in, out);
         } finally {
-            try {
-                in.close();
-                out.close();
-            } catch (IOException ex) {}
+            IOUtils.closeQuietly(in);
+            IOUtils.closeQuietly(out);
         }
     }
 
@@ -59,4 +62,31 @@ public class BrutIO {
         }
         return modified;
     }
+
+    public static CRC32 calculateCrc(InputStream input) throws IOException {
+        CRC32 crc = new CRC32();
+        int bytesRead;
+        byte[] buffer = new byte[8192];
+        while((bytesRead = input.read(buffer)) != -1) {
+            crc.update(buffer, 0, bytesRead);
+        }
+        return crc;
+    }
+
+    public static void copy(File inputFile, ZipOutputStream outputFile) throws IOException {
+        try (
+                FileInputStream fis = new FileInputStream(inputFile)
+        ) {
+            IOUtils.copy(fis, outputFile);
+        }
+    }
+
+    public static void copy(ZipFile inputFile, ZipOutputStream outputFile, ZipEntry entry) throws IOException {
+        try (
+                InputStream is = inputFile.getInputStream(entry)
+        ) {
+            IOUtils.copy(is, outputFile);
+        }
+    }
+
 }

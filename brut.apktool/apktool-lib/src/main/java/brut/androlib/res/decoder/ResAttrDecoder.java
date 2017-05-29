@@ -1,5 +1,5 @@
 /**
- *  Copyright 2011 Ryszard Wiśniewski <brut.alll@gmail.com>
+ *  Copyright 2014 Ryszard Wiśniewski <brut.alll@gmail.com>
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -17,7 +17,9 @@
 package brut.androlib.res.decoder;
 
 import brut.androlib.AndrolibException;
+import brut.androlib.err.UndefinedResObject;
 import brut.androlib.res.data.ResPackage;
+import brut.androlib.res.data.ResResSpec;
 import brut.androlib.res.data.value.ResAttr;
 import brut.androlib.res.data.value.ResScalarValue;
 
@@ -25,31 +27,50 @@ import brut.androlib.res.data.value.ResScalarValue;
  * @author Ryszard Wiśniewski <brut.alll@gmail.com>
  */
 public class ResAttrDecoder {
-	public String decode(int type, int value, String rawValue, int attrResId)
-			throws AndrolibException {
-		ResScalarValue resValue = mCurrentPackage.getValueFactory().factory(
-				type, value, rawValue);
+    public String decode(int type, int value, String rawValue, int attrResId)
+            throws AndrolibException {
+        ResScalarValue resValue = mCurrentPackage.getValueFactory().factory(
+                type, value, rawValue);
 
-		String decoded = null;
-		if (attrResId != 0) {
-			ResAttr attr = (ResAttr) getCurrentPackage().getResTable()
-					.getResSpec(attrResId).getDefaultResource().getValue();
-			decoded = attr.convertToResXmlFormat(resValue);
-		}
+        String decoded = null;
+        if (attrResId > 0) {
+            try {
+                ResAttr attr = (ResAttr) getCurrentPackage().getResTable()
+                        .getResSpec(attrResId).getDefaultResource().getValue();
 
-		return decoded != null ? decoded : resValue.encodeAsResXmlAttr();
-	}
+                decoded = attr.convertToResXmlFormat(resValue);
+            } catch (UndefinedResObject ex) {
+                // ignored
+            }
+        }
 
-	public ResPackage getCurrentPackage() throws AndrolibException {
-		if (mCurrentPackage == null) {
-			throw new AndrolibException("Current package not set");
-		}
-		return mCurrentPackage;
-	}
+        return decoded != null ? decoded : resValue.encodeAsResXmlAttr();
+    }
 
-	public void setCurrentPackage(ResPackage currentPackage) {
-		mCurrentPackage = currentPackage;
-	}
+    public String decodeManifestAttr(int attrResId)
+        throws AndrolibException {
 
-	private ResPackage mCurrentPackage;
+        if (attrResId != 0) {
+            ResResSpec resResSpec = getCurrentPackage().getResTable().getResSpec(attrResId);
+
+            if (resResSpec != null) {
+                return resResSpec.getName();
+            }
+        }
+
+        return null;
+    }
+
+    public ResPackage getCurrentPackage() throws AndrolibException {
+        if (mCurrentPackage == null) {
+            throw new AndrolibException("Current package not set");
+        }
+        return mCurrentPackage;
+    }
+
+    public void setCurrentPackage(ResPackage currentPackage) {
+        mCurrentPackage = currentPackage;
+    }
+
+    private ResPackage mCurrentPackage;
 }

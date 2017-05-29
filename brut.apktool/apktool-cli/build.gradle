@@ -1,5 +1,5 @@
 /**
- *  Copyright 2011 Ryszard Wiśniewski <brut.alll@gmail.com>
+ *  Copyright 2014 Ryszard Wiśniewski <brut.alll@gmail.com>
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -13,17 +13,20 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-
-version = apktoolversion
-apply plugin: 'fatjar'
-
-configurations {
-    proguard
-}
+apply plugin: 'eu.appsatori.fatjar'
 
 dependencies {
-  compile project(':brut.apktool:apktool-lib')
-  proguard 'net.sf.proguard:proguard-base:4.8'
+    compile project(':brut.apktool:apktool-lib')
+}
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath depends.proguard_gradle
+    }
 }
 
 gradle.taskGraph.whenReady {
@@ -34,25 +37,30 @@ gradle.taskGraph.whenReady {
   }
 }
 
-task proguard(type: JavaExec, dependsOn: fatJar) {
-    def outFile = jar.destinationDir.getPath() + '/' + jar.baseName + '-' + jar.version + '-small' + '.' + jar.extension
-    inputs.file jar.archivePath
-    outputs.file outFile
-
-    classpath = configurations.proguard
-    main = 'proguard.ProGuard'
-    args '-injars ' + "${jar.archivePath}" + ' (!META-INF/LICENSE.txt,!META-INF/NOTICE.txt,!README)'
-    args "-outjars ${outFile}"
-    args "-libraryjars ${System.properties['java.home']}/lib/rt.jar"
-    args '-dontobfuscate'
-    args '-dontoptimize'
-    args '-keep public class brut.apktool.Main { public static void main(java.lang.String[]); }'
-    args '-keep class org.yaml.snakeyaml.** { public protected private *; }'
-    args '-keepclassmembers enum * { public static **[] values(); public static ** valueOf(java.lang.String); }'
-    args '-dontwarn com.google.common.base.**'
-    args '-dontwarn com.google.common.collect.**'
-    args '-dontwarn javax.xml.xpath.**'
-    args '-dontnote **'
+task cleanOutputDirectory(type: Delete) {
+    delete fileTree(dir: jar.destinationDir.getPath(), exclude: "apktool-cli.jar")
 }
 
+task proguard(type: proguard.gradle.ProGuardTask, dependsOn: fatJar) {
+    def outFile = jar.destinationDir.getPath() + '/' + "apktool" + '-' + project.apktool_version + '-small' + '.' + jar.extension
+
+    injars fatJar.archivePath
+    outjars outFile
+
+    libraryjars "${System.properties['java.home']}/lib/rt.jar"
+
+    dontobfuscate
+    dontoptimize
+
+    keep 'public class brut.apktool.Main { public static void main(java.lang.String[]); }'
+    keep 'class org.yaml.snakeyaml.** { public protected private *; }'
+    keepclassmembers 'enum * { public static **[] values(); public static ** valueOf(java.lang.String); }'
+    dontwarn 'com.google.common.base.**'
+    dontwarn 'com.google.common.collect.**'
+    dontwarn 'com.google.common.util.**'
+    dontwarn 'javax.xml.xpath.**'
+    dontnote '**'
+}
+
+proguard.dependsOn cleanOutputDirectory
 tasks.getByPath(':release').dependsOn(proguard)

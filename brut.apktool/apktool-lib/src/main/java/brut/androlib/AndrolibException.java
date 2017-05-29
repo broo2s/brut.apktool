@@ -1,5 +1,5 @@
 /**
- *  Copyright 2011 Ryszard Wiśniewski <brut.alll@gmail.com>
+ *  Copyright 2014 Ryszard Wiśniewski <brut.alll@gmail.com>
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -22,18 +22,18 @@ import brut.common.BrutException;
  * @author Ryszard Wiśniewski <brut.alll@gmail.com>
  */
 public class AndrolibException extends BrutException {
-	public AndrolibException() {
-	}
+    public AndrolibException() {
+    }
 
-	public AndrolibException(String message) {
-		super(message);
-	}
+    public AndrolibException(String message) {
+        super(message);
+    }
 
-	public AndrolibException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    public AndrolibException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
-	public AndrolibException(Throwable cause) {
-		super(cause);
-	}
+    public AndrolibException(Throwable cause) {
+        super(cause);
+    }
 }

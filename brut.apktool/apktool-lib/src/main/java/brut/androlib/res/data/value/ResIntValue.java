@@ -1,5 +1,5 @@
 /**
- *  Copyright 2011 Ryszard Wiśniewski <brut.alll@gmail.com>
+ *  Copyright 2014 Ryszard Wiśniewski <brut.alll@gmail.com>
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -23,25 +23,25 @@ import brut.androlib.AndrolibException;
  * @author Ryszard Wiśniewski <brut.alll@gmail.com>
  */
 public class ResIntValue extends ResScalarValue {
-	protected final int mValue;
-	private int type;
+    protected final int mValue;
+    private int type;
 
-	public ResIntValue(int value, String rawValue, int type) {
-		this(value, rawValue, "integer");
-		this.type = type;
-	}
+    public ResIntValue(int value, String rawValue, int type) {
+        this(value, rawValue, "integer");
+        this.type = type;
+    }
 
-	public ResIntValue(int value, String rawValue, String type) {
-		super(type, rawValue);
-		this.mValue = value;
-	}
+    public ResIntValue(int value, String rawValue, String type) {
+        super(type, value, rawValue);
+        this.mValue = value;
+    }
 
-	public int getValue() {
-		return mValue;
-	}
+    public int getValue() {
+        return mValue;
+    }
 
-	@Override
-	protected String encodeAsResXml() throws AndrolibException {
-		return TypedValue.coerceToString(type, mValue);
-	}
+    @Override
+    protected String encodeAsResXml() throws AndrolibException {
+        return TypedValue.coerceToString(type, mValue);
+    }
 }

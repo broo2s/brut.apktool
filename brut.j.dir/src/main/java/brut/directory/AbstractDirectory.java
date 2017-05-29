@@ -1,5 +1,5 @@
 /**
- *  Copyright 2010 Ryszard Wiśniewski <brut.alll@gmail.com>
+ *  Copyright 2014 Ryszard Wiśniewski <brut.alll@gmail.com>
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -26,6 +26,7 @@ import java.util.Set;
 
 public abstract class AbstractDirectory implements Directory {
     protected Set<String> mFiles;
+    protected Set<String> mFilesRecursive;
     protected Map<String, AbstractDirectory> mDirs;
 
     @Override
@@ -41,14 +42,15 @@ public abstract class AbstractDirectory implements Directory {
         if (!recursive) {
             return mFiles;
         }
-
-        Set<String> files = new LinkedHashSet<String>(mFiles);
-        for (Map.Entry<String, ? extends Directory> dir : getAbstractDirs().entrySet()) {
-            for (String path : dir.getValue().getFiles(true)) {
-                files.add(dir.getKey() + separator + path);
+        if (mFilesRecursive == null) {
+            mFilesRecursive = new LinkedHashSet<String>(mFiles);
+            for (Map.Entry<String, ? extends Directory> dir : getAbstractDirs().entrySet()) {
+                for (String path : dir.getValue().getFiles(true)) {
+                    mFilesRecursive.add(dir.getKey() + separator + path);
+                }
             }
         }
-        return files;
+        return mFilesRecursive;
     }
 
     @Override
@@ -203,6 +205,11 @@ public abstract class AbstractDirectory implements Directory {
     public void copyToDir(File out, String fileName)
             throws DirectoryException {
         DirUtil.copyToDir(this, out, fileName);
+    }
+
+    public int getCompressionLevel(String fileName)
+            throws DirectoryException {
+        return -1;  // Unknown
     }
 
     protected Map<String, AbstractDirectory> getAbstractDirs() {

@@ -1,5 +1,5 @@
 /**
- *  Copyright 2010 Ryszard Wiśniewski <brut.alll@gmail.com>
+ *  Copyright 2014 Ryszard Wiśniewski <brut.alll@gmail.com>
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -46,6 +46,9 @@ public interface Directory {
         throws DirectoryException;
     public void copyToDir(File out, String fileName)
         throws DirectoryException;
+
+    public int getCompressionLevel(String fileName)
+            throws DirectoryException;
 
     public final char separator = '/';
 }

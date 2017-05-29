@@ -1,5 +1,5 @@
 /**
- *  Copyright 2011 Ryszard Wiśniewski <brut.alll@gmail.com>
+ *  Copyright 2014 Ryszard Wiśniewski <brut.alll@gmail.com>
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -24,6 +24,6 @@ import java.io.OutputStream;
  * @author Ryszard Wiśniewski <brut.alll@gmail.com>
  */
 public interface ResStreamDecoder {
-	public void decode(InputStream in, OutputStream out)
-			throws AndrolibException;
+    public void decode(InputStream in, OutputStream out)
+            throws AndrolibException;
 }
