@@ -1,0 +1,39 @@
+if (!rootProject.hasProperty('analysis')) {
+  return
+}
+
+apply plugin: 'jacoco'
+apply plugin: 'com.novoda.static-analysis'
+
+staticAnalysis {
+  penalty {
+    maxErrors = 0
+    maxWarnings = 0
+  }
+  checkstyle {
+    toolVersion "8.8"
+    configFile rootProject.file('config/checkstyle.xml')
+  }
+  pmd {
+    exclude '**/*.html'
+  }
+  findbugs { }
+  detekt { }
+  lintOptions { }
+}
+
+task jacocoTestReport(type: JacocoReport, dependsOn: 'testDebugUnitTest') {
+
+  reports {
+    xml.enabled = true
+    html.enabled = true
+  }
+
+  def fileFilter = ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*']
+  def debugTree = fileTree(dir: "${buildDir}/intermediates/classes/debug", excludes: fileFilter)
+  def mainSrc = "${project.projectDir}/src/main/java"
+
+  sourceDirectories = files([mainSrc])
+  classDirectories = files([debugTree])
+  executionData = files("${buildDir}/jacoco/testDebugUnitTest.exec")
+}

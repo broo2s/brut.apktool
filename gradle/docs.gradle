@@ -1,0 +1,46 @@
+afterEvaluate { project ->
+  // Generates a javadoc task for each library variant:
+  // `generateDebugJavadoc` and `generateReleaseJavadoc`
+  project.android.libraryVariants.all { variant ->
+    task("generate${variant.name.capitalize()}Javadoc", type: Javadoc) {
+      description "Generates Javadoc for $variant.name."
+      source = variant.javaCompile.source
+      ext.androidJar = "${project.android.sdkDirectory}/platforms/${project.android.compileSdkVersion}/android.jar"
+      classpath = files(variant.javaCompile.classpath.files) + files(ext.androidJar)
+      options.links("http://docs.oracle.com/javase/5/docs/api/")
+      options.linksOffline("http://d.android.com/reference", "${project.android.sdkDirectory}/docs/reference")
+
+      // disable javadoc lint warnings (e.g., missing javadoc)
+      options.addBooleanOption('Xdoclint:none', true)
+
+      exclude '**/BuildConfig.java'
+      exclude '**/R.java'
+    }
+  }
+
+  task androidJavadocsJar(type: Jar, dependsOn: generateReleaseJavadoc) {
+    classifier = 'javadoc'
+    from generateReleaseJavadoc.destinationDir
+  }
+
+  /**
+   * Uploads javadocs to gh-pages
+   */
+  task uploadDocs(dependsOn: generateReleaseJavadoc) {
+    description 'Uploads javadocs to gh-pages.'
+
+    doLast {
+      def origBranch = grgit.branch.current.name
+      grgit.checkout(branch: 'gh-pages', createBranch: false)
+      def dest = "doc/${rootProject.version}"
+      copy {
+        from "${buildDir}/docs/javadoc"
+        into "${rootProject.rootDir}/${dest}"
+      }
+      grgit.add(patterns: [dest])
+      grgit.commit(message: ":books: Add javadoc for ${rootProject.version}")
+      grgit.push()
+      grgit.checkout(branch: origBranch)
+    }
+  }
+}
