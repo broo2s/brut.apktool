@@ -74,7 +74,7 @@ allprojects {
 }
 
 release {
-    tagTemplate = 'v_${version}'
+    tagTemplate = '${name}-${version}'
     preTagCommitMessage = ':cloud: Release'
     tagCommitMessage = ':cloud: Release'
     newVersionCommitMessage = ':cloud: Bump'
