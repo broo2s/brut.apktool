@@ -1,5 +1,8 @@
-apktool-lib 1.4.4-3
-===================
+# apktool-lib [![CircleCI branch](https://img.shields.io/circleci/project/tony19/apktool-lib/master.svg)](https://circleci.com/gh/tony19/logback-android)
+<sup>v1.4.4-4</sup>
+
+Overview
+--------
 This library decodes a given precompiled XML resource (such as `AndroidManifest.xml`)
 from an APK without requiring an Android application context.
  
@@ -14,87 +17,66 @@ libraries to read precompiled XML without an application context or the Android 
 
 This is based on the [APK Tool][1] project.
 
-
 Usage
-=====
+-----
+Parse XML events from `AXmlResourceParser` in a loop, as in the following code example:
 
-_Maven dependency_
-
-<pre>
-&lt;dependency>
-  &lt;groupId>com.github.tony19&lt;/groupId>
-  &lt;artifactId>apktool-lib&lt;/artifactId>
-  &lt;version>1.4.4-3&lt;/version>
-&lt;/dependency>
-</pre>
-
-_Steps_
-
- 1. Add the `apktool-lib` dependency to your `pom.xml`.
- 2. Parse XML events from `AXmlResourceParser` in a loop, as in the following code example:
-
-<pre>
+```java
 import brut.androlib.res.decoder.AXmlResourceParser;
 
 //...
 
 // called from a library, used by an Android application
 public void readManifest() {
-	InputStream manifestStream = getClassLoader().getResourceAsStream("AndroidManifest.xml");
-	parseXmlStream(manifestStream);
+  InputStream manifestStream = getClassLoader().getResourceAsStream("AndroidManifest.xml");
+  parseXmlStream(manifestStream);
 }
 
 public void parseXmlStream(InputStream stream) {
-	AXmlResourceParser xpp = new AXmlResourceParser(stream);
-	
-	int eventType = -1;
-	while ((eventType = xpp.next()) > -1) {
-		if (XmlPullParser.START_DOCUMENT == eventType) {
-			startDocument(xpp);
-		} else if (XmlPullParser.END_DOCUMENT == eventType) {
-			endDocument();
-			break;
-		} else if (XmlPullParser.START_TAG == eventType) {
-			startElement(xpp);
-		} else if (XmlPullParser.END_TAG == eventType) {
-			endElement(xpp);
-		} else if (XmlPullParser.TEXT == eventType) {
-			characters(xpp);
-		}
-	}
+  AXmlResourceParser xpp = new AXmlResourceParser(stream);
+
+  int eventType = -1;
+  while ((eventType = xpp.next()) > -1) {
+    if (XmlPullParser.START_DOCUMENT == eventType) {
+      startDocument(xpp);
+    } else if (XmlPullParser.END_DOCUMENT == eventType) {
+      endDocument();
+      break;
+    } else if (XmlPullParser.START_TAG == eventType) {
+      startElement(xpp);
+    } else if (XmlPullParser.END_TAG == eventType) {
+      endElement(xpp);
+    } else if (XmlPullParser.TEXT == eventType) {
+      characters(xpp);
+    }
+  }
 }
-</pre>
+```
 
 
 Download
-========
-[apktool-lib-1.4.4-3.jar](https://oss.sonatype.org/content/repositories/releases/com/github/tony19/apktool-lib/1.4.4-3/apktool-lib-1.4.4-3.jar)
+--------
+_Gradle_
 
+```groovy
+dependencies {
+  compile 'com.github.tony19:apktool-lib:1.4.4-4'
+}
+```
 
 Build
-=====
+-----
+Use these commands to create the AAR:
 
-To build, use Maven 2+:
+    git clone git://github.com/tony19/apktool-lib.git
+    cd apktool-lib
+    scripts/makejar.sh
 
-    $ mvn package
-
+The file is output to: `./build/apktool-lib-1.4.4-4-debug.aar`
 
 License
 =======
 [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0)
 
-
-Changelog
-=========
-
-__1.4.4-3__ (26 July 2012)
- * Fix attribute decoding
-
-__1.4.4-2__ (26 July 2012)
- * Remove debug info and unused resource to reduce JAR size
-
-__1.4.4-1__ (25 July 2012)
- * Initial commit (based on [apktool][1] v1.4.4)
-
-[1]: https://github.com/brutall/brut.apktool
-[2]: http://developer.android.com/reference/android/content/res/AssetManager.html#openXmlResourceParser(java.lang.String)
+ [1]: https://github.com/brutall/brut.apktool
+ [2]: http://developer.android.com/reference/android/content/res/AssetManager.html#openXmlResourceParser(java.lang.String)
