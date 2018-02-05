@@ -16,7 +16,6 @@
 
 package brut.androlib.res.xml;
 
-import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -192,10 +191,12 @@ public final class ResXmlEncoders {
         return ret;
     }
 
+    private static final char CHAR_UNDEFINED = 65535;
+
     private static boolean isPrintableChar(char c) {
         Character.UnicodeBlock block = Character.UnicodeBlock.of(c);
         return !Character.isISOControl(c)
-                && c != KeyEvent.CHAR_UNDEFINED
+                && c != CHAR_UNDEFINED
                 && block != null
                 && block != Character.UnicodeBlock.SPECIALS;
     }
