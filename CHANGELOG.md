@@ -1,6 +1,7 @@
 # Changelog
 
 __1.4.4-4__ (5 February 2018)
+ * Switch to AAR format
  * Remove Android dependency
  * Fix invalid reference to AWT
 
