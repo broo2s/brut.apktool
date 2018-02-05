@@ -12,3 +12,5 @@ __1.4.4-2__ (26 July 2012)
 
 __1.4.4-1__ (25 July 2012)
  * Initial commit (based on [apktool][1] v1.4.4)
+
+ [1]: https://github.com/brutall/brut.apktool
