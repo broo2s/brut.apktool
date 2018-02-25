@@ -1,5 +1,5 @@
 # apktool-lib [![CircleCI branch](https://img.shields.io/circleci/project/tony19/apktool-lib/master.svg)](https://circleci.com/gh/tony19/logback-android)
-<sup>v1.4.4-4</sup>
+<sup>v1.4.4-5</sup>
 
 Overview
 --------
@@ -60,7 +60,7 @@ _Gradle_
 
 ```groovy
 dependencies {
-  compile 'com.github.tony19:apktool-lib:1.4.4-4'
+  compile 'com.github.tony19:apktool-lib:1.4.4-5'
 }
 ```
 
@@ -72,7 +72,7 @@ Use these commands to create the AAR:
     cd apktool-lib
     scripts/makejar.sh
 
-The file is output to: `./build/apktool-lib-1.4.4-4-debug.aar`
+The file is output to: `./build/apktool-lib-1.4.4-5-debug.aar`
 
 License
 =======
